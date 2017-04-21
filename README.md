@@ -30,7 +30,7 @@ export reald = require "lib/nd"
 ```
 
 `somwhere else - perhaps same somewhere ..`
-```
+```moon
 -- field-of-view constant
 export fov = 250 -- nice fov
 
