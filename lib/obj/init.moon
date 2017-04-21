@@ -13,7 +13,7 @@ class
             if "v " == string.sub v, 1, 2
                 v_line = split (v\sub 3), " "
 
-                table.insert @vertices, [(75 * tonumber a) for a in *v_line]
+                table.insert @vertices, [(tonumber a) for a in *v_line]
 
     debug_draw: =>
         love.graphics.push!
@@ -21,6 +21,6 @@ class
 
         for p in *@vertices
             love.graphics.setColor 255, 255, 255
-            reald.graphics.circle 250, "fill", p, 5
+            reald.graphics.circle 500, "fill", p, 2
 
         love.graphics.pop!

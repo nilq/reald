@@ -38,10 +38,14 @@ with love
                 .graphics.clear .graphics.getBackgroundColor!
                 .graphics.setColor 255, 255, 255
 
+                .graphics.push!
+                .graphics.translate .graphics.getWidth! / 2, .graphics.getHeight!
                 .graphics.origin!
 
                 state\draw!
 
                 .graphics.present!
-            
+
+                .graphics.pop!
+
             .timer.sleep 0.001 if .timer
