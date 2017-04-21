@@ -1,39 +1,46 @@
 export state = {
-    angle: 0
-    x: 0
+    cubes: {}
 }
 
 with state
+    .load = =>
+        for x = 0, 10
+            for z = 0, 10
+                cube = OBJ "res/cube.obj"
+
+                for v in *cube.vertices
+                    v[1] += x * 2
+                    v[3] += z * 2
+
+                table.insert .cubes, cube
+
     .update = (dt) =>
-        .angle += dt
-        .x     += dt * 10
         love.window.setTitle "#{love.timer.getFPS!}"
 
-        if love.keyboard.isDown "left"
-            for p in *cube.vertices
-                p[1] -= dt * 25
-        
+        dx, dy, dz = 0, 0, 0
+        s      = 35
+
         if love.keyboard.isDown "right"
-            for p in *cube.vertices
-                p[1] += dt * 25
-
+            dx = s
+        if love.keyboard.isDown "left"
+            dx = -s
         if love.keyboard.isDown "down"
-            for p in *cube.vertices
-                p[3] -= dt * 25
-
+            dz = -s
         if love.keyboard.isDown "up"
-            for p in *cube.vertices
-                p[3] += dt * 25
-
-        if love.keyboard.isDown "lshift"
-            for p in *cube.vertices
-                p[2] += dt * 25
-
+            dz = s
         if love.keyboard.isDown "space"
-            for p in *cube.vertices
-                p[2] -= dt * 25
+            dy = -s
+        if love.keyboard.isDown "lshift"
+            dy = s
+        
+        for cube in *.cubes
+            for v in *cube.vertices
+                v[1] += dx * dt
+                v[2] += dy * dt
+                v[3] += dz * dt
 
     .draw = =>
-        cube\debug_draw!
+        for cube in *.cubes
+            cube\debug_draw!
 
 state

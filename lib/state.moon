@@ -27,6 +27,10 @@ state.switch = (path, args) =>
     self.state.load args if self.state.load
     self
 
+state.load = =>
+    self.state\load!
+    self
+
 state.update = (dt) =>
     self.state\update dt if self.state.update
     self

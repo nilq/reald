@@ -10,6 +10,8 @@ class
         @vertices = {}
         @faces    = {}
 
+        @r, @g, @b = (math.random 0, 255), (math.random 0, 255), math.random 0, 255
+
         for i, v in ipairs lines file
             if "v " == string.sub v, 1, 2
                 v_line = split (v\sub 3), " "
@@ -26,7 +28,7 @@ class
         love.graphics.translate love.graphics.getWidth! / 2, love.graphics.getHeight! / 2
 
         for p in *@faces
-            love.graphics.setColor 255, 255, 255
+            love.graphics.setColor @r, @g, @b
             reald.graphics.triangle 250, "fill", @vertices[p[1]], @vertices[p[2]], @vertices[p[3]]
 
         love.graphics.pop!

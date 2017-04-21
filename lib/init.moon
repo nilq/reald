@@ -15,6 +15,8 @@ with love
 
         state\switch "src/game"
 
+        state\load!
+
         while true
             update_time += dt
 
