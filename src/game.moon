@@ -1,12 +1,15 @@
-state = {
-    x: 0
+export state = {
+    x: 0, z: 0, angle: 0, radius: 200
 }
 
 with state
     .update = (dt) =>
-        .x += dt * 25
+        .angle += dt
+
+        .x = .radius * math.cos .angle
+        .z = .radius * math.sin .angle
 
     .draw = =>
-        love.graphics.circle "fill", .x, 100, 100
+        reald.graphics.line 300, {.x + 400, 300, .z}, {400, 0, 0}
 
 state

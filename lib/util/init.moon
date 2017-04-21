@@ -23,9 +23,9 @@ combine = (...) ->
         fn = select i, ...
 
         if fn != nil
-        assert (is_callable fn), _error
-        funcs[#funcs + 1] = fn
+            assert (is_callable fn), _error
+            funcs[#funcs + 1] = fn
 
     (...) ->
         for f in *funcs
-        f ...
+            f ...
