@@ -1,10 +1,12 @@
 export state = {
     angle: 0
+    x: 0
 }
 
 with state
     .update = (dt) =>
         .angle += dt
+        .x     += dt * 10
         love.window.setTitle "#{love.timer.getFPS!}"
 
         if love.keyboard.isDown "left"

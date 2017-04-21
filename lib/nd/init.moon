@@ -31,7 +31,7 @@ circle = (fov, mode, p1, radius, segments) ->
     with love.graphics
         .circle mode, a[1] * s, a[2] * s, radius * s, segments
 
-poly = (fov, mode, p1, p2, p3) ->
+triangle = (fov, mode, p1, p2, p3) ->
     a, s   = project_to 2, fov, unpack p1
     a2, s2 = project_to 2, fov, unpack p2
     a3, s3 = project_to 2, fov, unpack p3
@@ -46,6 +46,6 @@ poly = (fov, mode, p1, p2, p3) ->
     graphics: {
         :line
         :circle
-        :poly
+        :triangle
     }
 }

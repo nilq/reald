@@ -8,6 +8,7 @@ split = (inp, sep="%s") ->
 class
     new: (file) =>
         @vertices = {}
+        @faces    = {}
 
         for i, v in ipairs lines file
             if "v " == string.sub v, 1, 2
@@ -15,12 +16,17 @@ class
 
                 table.insert @vertices, [(tonumber a) for a in *v_line]
 
+            if "f " == string.sub v, 1, 2
+                v_line = split (v\sub 3), " "
+
+                table.insert @faces, [(tonumber a) for a in *v_line]
+
     debug_draw: =>
         love.graphics.push!
-        love.graphics.translate 100, 100
+        love.graphics.translate love.graphics.getWidth! / 2, love.graphics.getHeight! / 2
 
-        for p in *@vertices
+        for p in *@faces
             love.graphics.setColor 255, 255, 255
-            reald.graphics.circle 500, "fill", p, 2
+            reald.graphics.triangle 250, "fill", @vertices[p[1]], @vertices[p[2]], @vertices[p[3]]
 
         love.graphics.pop!
