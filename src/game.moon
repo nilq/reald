@@ -1,15 +1,37 @@
 export state = {
-    x: 0, z: 0, angle: 0, radius: 200
+    angle: 0
 }
 
 with state
     .update = (dt) =>
         .angle += dt
+        love.window.setTitle "#{love.timer.getFPS!}"
 
-        .x = .radius * math.cos .angle
-        .z = .radius * math.sin .angle
+        if love.keyboard.isDown "left"
+            for p in *cube.vertices
+                p[1] -= dt * 25
+        
+        if love.keyboard.isDown "right"
+            for p in *cube.vertices
+                p[1] += dt * 25
+
+        if love.keyboard.isDown "down"
+            for p in *cube.vertices
+                p[3] -= dt * 25
+
+        if love.keyboard.isDown "up"
+            for p in *cube.vertices
+                p[3] += dt * 25
+
+        if love.keyboard.isDown "lshift"
+            for p in *cube.vertices
+                p[2] += dt * 25
+
+        if love.keyboard.isDown "space"
+            for p in *cube.vertices
+                p[2] -= dt * 25
 
     .draw = =>
-        reald.graphics.line 300, {.x + 400, 300, .z}, {400, 0, 0}
+        cube\debug_draw!
 
 state

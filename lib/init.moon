@@ -18,11 +18,14 @@ with love
         while true
             update_time += dt
 
-            for name, a, b, c, d, e, f in .event.poll!
-                if "quit" == name
-                    return a unless .quit or not .quit!
-                
-                .handlers[name] a, b, c, d, e, f
+            if love.event
+                .event.pump!
+
+                for name, a, b, c, d, e, f in .event.poll!
+                    if "quit" == name
+                        return a unless .quit or not .quit!
+
+                    .handlers[name] a, b, c, d, e, f
 
             if .timer
                 .timer.step!
