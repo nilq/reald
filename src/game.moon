@@ -1,6 +1,8 @@
 export state = {
     absolutes: {} -- *as in absolutely being drawn*
     entities:  {}
+
+    cam: {x: 0, y: 0, z: 0, dx: 0, dy: 0, dz: 0, pos_x: 0, pos_y: 0}
 }
 
 export entity = require "src/things"
@@ -8,7 +10,7 @@ export entity = require "src/things"
 level = require "src/level"
 
 -- averages vertice's given axis
-avgn = (a, n) ->
+export avgn = (a, n) ->
     sum = 0
     for v in *(a.vertices or a.model.vertices)
         sum += v[n]
@@ -18,7 +20,10 @@ avgn = (a, n) ->
 -- being split into two based on comparison thing
 flagn = (a, n) ->
     for b in *a
-        b.flag = 0 > avgn b, n
+        if state.cam.dx < 0
+            b.flag = state.cam.dx < avgn b, n
+        else
+            b.flag = state.cam.dx > avgn b, n
     a
 
 -- splits flagged list based on flag
@@ -46,6 +51,7 @@ with state
         level\load "res/test.png"
 
         for li in *.absolutes
+            break unless li
             l, l1 = splitn li, 1
 
             li.left  = l
@@ -57,33 +63,12 @@ with state
         for l in *.absolutes
             for e in *l
                 e\update dt if e.update
-
-        dy, dx, dz = 0, 0, 0
-        s          = 35
-
-        if love.keyboard.isDown "s"
-            dz = -s
-        if love.keyboard.isDown "w"
-            dz = s
-        if love.keyboard.isDown "a"
-            dx = -s
-        if love.keyboard.isDown "d"
-            dx = s
-        if love.keyboard.isDown "rshift"
-            dy = -s
-        if love.keyboard.isDown "lshift"
-            dy = s
         
         i1 = 1
         for l in *.absolutes
             i = 1
             for cube in *l
                 break unless cube
-
-                for v in *(cube.vertices or cube.model.vertices)
-                    v[1] += dx * dt
-                    v[2] += dy * dt
-                    v[3] += dz * dt
 
                 for e in *.entities
                     if e == cube
@@ -92,7 +77,7 @@ with state
                             ix = 1
                             for a in *.absolutes[y]
                                 break if a == cube
-                                if (avgn cube, 1) < avgn a, 1
+                                if (avgn cube, 1) > avgn a, 1
                                     break
                                 ix += 1
 
@@ -100,13 +85,16 @@ with state
                             table.insert .absolutes[y], ix, cube
                 i += 1
             i1 += 1
-        
-        if true
-            for li in *.absolutes
-                l, l1 = splitn li, 1
+    
+        for li in *.absolutes
+            l, l1 = splitn li, 1
 
-                li.left  = l
-                li.right = l1
+            li.left  = l
+            li.right = l1
+
+        .cam.x = math.lerp .cam.x, .cam.dx, dt * 3
+        .cam.y = math.lerp .cam.y, .cam.dy, dt
+        .cam.z = math.lerp .cam.z, .cam.dz, dt * 3 
 
     .spawn_absolute = (entity, y) =>
         .absolutes[y] = {} unless .absolutes[y]
@@ -116,11 +104,23 @@ with state
         table.insert .entities, entity
 
     .draw = =>
+        love.graphics.setColor 0, 255, 255
+        love.graphics.rectangle "fill", love.graphics.getWidth! / 2 + .cam.pos_x, love.graphics.getHeight! / 2 +.cam.pos_y, 10, 10
+       
+        love.graphics.push!
+        .cam.pos_x, .cam.pos_y = love.graphics.getWidth! / 2 + .cam.x, love.graphics.getHeight! / 2 +.cam.y
+        love.graphics.translate .cam.pos_x, .cam.pos_y
+
         for l = #.absolutes, 1, -1
             li = .absolutes[l]
             for e = #li.right, 1, -1
                 li.right[e]\draw! if li.right[e].draw
             for e = 1, #li.left
                 li.left[e]\draw! if li.left[e].draw
+    
+        love.graphics.setColor 255, 0, 0
+        love.graphics.rectangle "fill", love.graphics.getWidth! / 2 + .cam.pos_x, love.graphics.getHeight! / 2 +.cam.pos_y, 10, 10
+        
+        love.graphics.pop!
 
 state

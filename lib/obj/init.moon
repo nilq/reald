@@ -34,7 +34,7 @@ class
 
     draw: =>
         love.graphics.push!
-        love.graphics.translate love.graphics.getWidth! / 2, love.graphics.getHeight! / 2
+        love.graphics.translate 0, 0
 
         for p in *@faces
             love.graphics.setColor @r, @g, @b

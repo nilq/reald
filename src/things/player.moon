@@ -17,9 +17,6 @@ player.new = (model, x, y) ->
     world\add p, p.x, p.y, p.model.width * 2, p.model.height * 2
     p.draw = =>
         @model\draw!
-
-        love.graphics.setColor 255, 0, 0
-        love.graphics.rectangle "fill", @x, @y, @model.width, @model.height
     
     p.update = (dt) =>
         @grounded = false
@@ -44,6 +41,9 @@ player.new = (model, x, y) ->
 
             if c.normal.x != 0
                 @dx = 0
+
+        state.cam.dx = (avgn @, 1)
+        state.cam.dy = (avgn @, 2)
         
         if @grounded and love.keyboard.isDown "space"
             @dy = -@jump

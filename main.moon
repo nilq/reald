@@ -4,4 +4,7 @@ export OBJ   = require "lib/obj"
 
 export fov   = 700
 
+math.lerp = (a, b, t) ->
+    a + (b - a) * t
+
 require "lib"
