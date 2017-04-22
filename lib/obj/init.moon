@@ -20,6 +20,17 @@ class
                 v_line = split (v\sub 3), " "
 
                 table.insert @faces, [(tonumber a) for a in *v_line]
+        
+        @width, @height = 0, 0
+        for v in *@vertices
+            @width  = v[1] if v[1] > @width
+            @height = v[2] if v[2] > @height
+
+    move: (...) =>
+        d = {...}
+        for v in *@vertices
+            for i = 1, #d
+                v[i] += d[i]
 
     draw: =>
         love.graphics.push!

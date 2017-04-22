@@ -1,19 +1,18 @@
 export state = {
-    absolutes: {}
+    absolutes: {} -- *as in absolutely being drawn*
     entities:  {}
-    draws:     {}
 }
+
+export entity = require "src/things"
 
 level = require "src/level"
 
 -- averages vertice's given axis
 avgn = (a, n) ->
     sum = 0
-
-    for v in *a.vertices
+    for v in *(a.vertices or a.model.vertices)
         sum += v[n]
-
-    sum / #a.vertices
+    sum / #(a.vertices or a.model.vertices)
  
 -- list of vertice-based entities
 -- being split into two based on comparison thing
@@ -54,18 +53,14 @@ with state
 
     .update = (dt) =>
         for e in *.entities
-            e.update dt if e.update
+            e\update dt if e.update
         for l in *.absolutes
             for e in *l
-                e.update dt if e.update
+                e\update dt if e.update
 
-        dx, dy, dz = 0, 0, 0
-        s          = 35
+        dy, dz = 0, 0
+        s      = 35
 
-        if love.keyboard.isDown "right"
-            dx = s
-        if love.keyboard.isDown "left"
-            dx = -s
         if love.keyboard.isDown "down"
             dz = -s
         if love.keyboard.isDown "up"
@@ -77,12 +72,11 @@ with state
 
         for l in *.absolutes
             for cube in *l
-                for v in *cube.vertices
-                    v[1] += dx * dt
+                for v in *(cube.vertices or cube.model.vertices)
                     v[2] += dy * dt
                     v[3] += dz * dt
         
-        if dx + dy != 0
+        if true
             for li in *.absolutes
                 l, l1 = splitn li, 1
 

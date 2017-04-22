@@ -3,6 +3,7 @@ level = {
     default: {
         "dirt":  {0, 0, 0}
         "grass": {0, 255, 0}
+        "dude":  {255, 255, 0}
     }
 }
 
@@ -20,7 +21,7 @@ with level
                 for k, v in pairs .default
                     if r == v[1] and g == v[2] and b == v[3]
                         .make_entity k, .grid_size * rx, .grid_size * ry, -600
-    
+
     level.make_entity = (k, x, y, z) ->
         switch k
             when "grass"
@@ -31,7 +32,8 @@ with level
                     v[2] += y
                     v[3] += z
 
-                state\spawn_absolute cube, y / .grid_size
+                b = entity.block.new cube, x, y
+                state\spawn_absolute b, y / .grid_size
 
             when "dirt"
                 cube = OBJ "res/cube.obj", 130, 80, 8
@@ -42,5 +44,17 @@ with level
                     v[3] += z
 
                 state\spawn_absolute cube, y / .grid_size
+
+            when "dude"
+                cube = OBJ "res/cube.obj", 255, 255, 0
+
+                for v in *cube.vertices
+                    v[1] += x
+                    v[2] += y
+                    v[3] += z
+
+                p = entity.player.new cube, x, y
+                state\spawn p
+                state\spawn_absolute p, y / .grid_size
 
 level

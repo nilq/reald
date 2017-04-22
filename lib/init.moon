@@ -1,4 +1,5 @@
 export state = require "lib/state"
+export world = (require "lib/bump").newWorld!
 
 with love
     .graphics.setDefaultFilter "nearest", "nearest"
