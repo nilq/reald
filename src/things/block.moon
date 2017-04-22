@@ -2,7 +2,7 @@ block = {}
 
 block.new = (model, x, y) ->
     b = {:model}
-    world\add b, x, y, b.model.width, b.model.height
+    world\add b, x, y, b.model.width * 2, b.model.height * 2
     b.draw = =>
         @model\draw!
         love.graphics.setColor 255, 0, 255

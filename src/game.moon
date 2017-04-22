@@ -58,23 +58,48 @@ with state
             for e in *l
                 e\update dt if e.update
 
-        dy, dz = 0, 0
-        s      = 35
+        dy, dx, dz = 0, 0, 0
+        s          = 35
 
-        if love.keyboard.isDown "down"
+        if love.keyboard.isDown "s"
             dz = -s
-        if love.keyboard.isDown "up"
+        if love.keyboard.isDown "w"
             dz = s
-        if love.keyboard.isDown "space"
+        if love.keyboard.isDown "a"
+            dx = -s
+        if love.keyboard.isDown "d"
+            dx = s
+        if love.keyboard.isDown "rshift"
             dy = -s
         if love.keyboard.isDown "lshift"
             dy = s
-
+        
+        i1 = 1
         for l in *.absolutes
+            i = 1
             for cube in *l
+                break unless cube
+
                 for v in *(cube.vertices or cube.model.vertices)
+                    v[1] += dx * dt
                     v[2] += dy * dt
                     v[3] += dz * dt
+
+                for e in *.entities
+                    if e == cube
+                        y = math.floor e.y / 2
+                        unless y < 1 or y > #.absolutes
+                            ix = 1
+                            for a in *.absolutes[y]
+                                break if a == cube
+                                if (avgn cube, 1) < avgn a, 1
+                                    break
+                                ix += 1
+
+                            table.remove l, i
+                            table.insert .absolutes[y], ix, cube
+                i += 1
+            i1 += 1
         
         if true
             for li in *.absolutes
