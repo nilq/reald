@@ -1,24 +1,66 @@
 export state = {
-    cubes: {}
+    absolutes: {}
+    entities:  {}
+    draws:     {}
 }
+
+level = require "src/level"
+
+-- averages vertice's given axis
+avgn = (a, n) ->
+    sum = 0
+
+    for v in *a.vertices
+        sum += v[n]
+
+    sum / #a.vertices
+ 
+-- list of vertice-based entities
+-- being split into two based on comparison thing
+flagn = (a, n) ->
+    for b in *a
+        b.flag = 0 > avgn b, n
+    a
+
+-- splits flagged list based on flag
+splitn = (a, n) ->
+    flagn a, n
+
+    l, l1 = {}, {}
+    for b in *a
+        if b.flag
+            table.insert l, b
+        else
+            table.insert l1, b
+    l, l1
+
+-- sorts vertice-based objects avg x
+sortx = (a, b) ->
+    (avgn a, 1) < avgn b, 1
+
+-- sorts vertice-based objects avg y
+sorty = (a, b) ->
+    (avgn a, 2) > avgn b, 2
 
 with state
     .load = =>
-        for x = 0, 10
-            for z = 0, 10
-                cube = OBJ "res/cube.obj"
+        level\load "res/test.png"
 
-                for v in *cube.vertices
-                    v[1] += x * 2
-                    v[3] += z * 2
+        for li in *.absolutes
+            l, l1 = splitn li, 1
 
-                table.insert .cubes, cube
+            li.left  = l
+            li.right = l1
 
     .update = (dt) =>
-        love.window.setTitle "#{love.timer.getFPS!}"
+        for e in *.entities
+            e.update dt if e.update
+        for l in *.absolutes
+            for e in *l
+                e.update dt if e.update
 
         dx, dy, dz = 0, 0, 0
-        s      = 35
+        s          = 35
 
         if love.keyboard.isDown "right"
             dx = s
@@ -32,15 +74,34 @@ with state
             dy = -s
         if love.keyboard.isDown "lshift"
             dy = s
+
+        for l in *.absolutes
+            for cube in *l
+                for v in *cube.vertices
+                    v[1] += dx * dt
+                    v[2] += dy * dt
+                    v[3] += dz * dt
         
-        for cube in *.cubes
-            for v in *cube.vertices
-                v[1] += dx * dt
-                v[2] += dy * dt
-                v[3] += dz * dt
+        if dx + dy != 0
+            for li in *.absolutes
+                l, l1 = splitn li, 1
+
+                li.left  = l
+                li.right = l1
+
+    .spawn_absolute = (entity, y) =>
+        .absolutes[y] = {} unless .absolutes[y]
+        table.insert .absolutes[y], entity
+
+    .spawn = (entity) =>
+        table.insert .entities, entity
 
     .draw = =>
-        for cube in *.cubes
-            cube\debug_draw!
+        for l = #.absolutes, 1, -1
+            li = .absolutes[l]
+            for e = #li.right, 1, -1
+                li.right[e]\draw! if li.right[e].draw
+            for e = 1, #li.left
+                li.left[e]\draw! if li.left[e].draw
 
 state
