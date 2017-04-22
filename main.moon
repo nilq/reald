@@ -8,3 +8,6 @@ math.lerp = (a, b, t) ->
     a + (b - a) * t
 
 require "lib"
+
+love.keypressed = (key, isrepeat) =>
+    state\press key

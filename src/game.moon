@@ -48,7 +48,7 @@ sorty = (a, b) ->
 
 with state
     .load = =>
-        level\load "res/test.png"
+        level\load "res/level1.png"
 
         for li in *.absolutes
             break unless li
@@ -61,11 +61,13 @@ with state
         for e in *.entities
             e\update dt if e.update
         for l in *.absolutes
+            break unless l
             for e in *l
                 e\update dt if e.update
         
         i1 = 1
         for l in *.absolutes
+            break unless l
             i = 1
             for cube in *l
                 break unless cube
@@ -87,14 +89,15 @@ with state
             i1 += 1
     
         for li in *.absolutes
+            break unless li
             l, l1 = splitn li, 1
 
             li.left  = l
             li.right = l1
 
-        .cam.x = math.lerp .cam.x, .cam.dx, dt * 3
-        .cam.y = math.lerp .cam.y, .cam.dy, dt
-        .cam.z = math.lerp .cam.z, .cam.dz, dt * 3 
+        .cam.x = math.lerp .cam.x, .cam.dx, dt * 30
+        .cam.y = math.lerp .cam.y, .cam.dy, dt * 3
+        .cam.z = math.lerp .cam.z, .cam.dz, dt * 30
 
     .spawn_absolute = (entity, y) =>
         .absolutes[y] = {} unless .absolutes[y]
@@ -104,23 +107,23 @@ with state
         table.insert .entities, entity
 
     .draw = =>
-        love.graphics.setColor 0, 255, 255
-        love.graphics.rectangle "fill", love.graphics.getWidth! / 2 + .cam.pos_x, love.graphics.getHeight! / 2 +.cam.pos_y, 10, 10
-       
         love.graphics.push!
         .cam.pos_x, .cam.pos_y = love.graphics.getWidth! / 2 + .cam.x, love.graphics.getHeight! / 2 +.cam.y
         love.graphics.translate .cam.pos_x, .cam.pos_y
 
         for l = #.absolutes, 1, -1
             li = .absolutes[l]
+            break unless li.right
             for e = #li.right, 1, -1
                 li.right[e]\draw! if li.right[e].draw
-            for e = 1, #li.left
+            break unless li.left
+            for e = #li.left, 1, -1
                 li.left[e]\draw! if li.left[e].draw
-    
-        love.graphics.setColor 255, 0, 0
-        love.graphics.rectangle "fill", love.graphics.getWidth! / 2 + .cam.pos_x, love.graphics.getHeight! / 2 +.cam.pos_y, 10, 10
-        
+
         love.graphics.pop!
+    
+    .press = (key) =>
+        for e in *.entities
+            e\press key if e.press
 
 state

@@ -3,6 +3,7 @@ export world = (require "lib/bump").newWorld!
 
 with love
     .graphics.setDefaultFilter "nearest", "nearest"
+    .graphics.setBackgroundColor 200, 255, 255
 
     .run = ->
         dt = 0

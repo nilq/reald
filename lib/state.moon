@@ -39,4 +39,8 @@ state.draw = =>
     self.state.draw! if self.state.update
     self
 
+state.press = (key, isrepeat) =>
+    self.state.press key, isrepeat if self.state.press
+    self
+
 state
