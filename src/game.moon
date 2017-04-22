@@ -108,7 +108,7 @@ with state
 
     .draw = =>
         love.graphics.push!
-        .cam.pos_x, .cam.pos_y = love.graphics.getWidth! / 2 + .cam.x, love.graphics.getHeight! / 2 +.cam.y
+        .cam.pos_x, .cam.pos_y = love.graphics.getWidth! / 2 - .cam.x * 10, love.graphics.getHeight! / 2 - .cam.y * 10
         love.graphics.translate .cam.pos_x, .cam.pos_y
 
         for l = #.absolutes, 1, -1

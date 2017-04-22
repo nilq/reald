@@ -27,7 +27,7 @@ with love
 
                 for name, a, b, c, d, e, f in .event.poll!
                     if "quit" == name
-                        return a unless .quit or not .quit!
+                        return a unless .quit or not .event.quit!
 
                     .handlers[name] a, b, c, d, e, f
 

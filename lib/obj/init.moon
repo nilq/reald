@@ -6,7 +6,7 @@ split = (inp, sep="%s") ->
     [t for t in string.gmatch inp, "([^#{sep}]+)"]
 
 class
-    new: (file, @r=100, @g=100, @b=0) =>
+    new: (file, @r=100, @g=100, @b=0, s=1) =>
         @vertices = {}
         @faces    = {}
 
@@ -14,7 +14,7 @@ class
             if "v " == string.sub v, 1, 2
                 v_line = split (v\sub 3), " "
 
-                table.insert @vertices, [(tonumber a) for a in *v_line]
+                table.insert @vertices, [(s * tonumber a) for a in *v_line]
 
             if "f " == string.sub v, 1, 2
                 v_line = split (v\sub 3), " "
