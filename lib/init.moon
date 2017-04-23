@@ -1,9 +1,28 @@
 export state = require "lib/state"
-export world = (require "lib/bump").newWorld!
+export bump  = require "lib/bump"
+export world = bump.newWorld!
+
+export shine = require "lib/shine"
 
 with love
     .graphics.setDefaultFilter "nearest", "nearest"
     .graphics.setBackgroundColor 200, 255, 255
+
+    grain = shine.filmgrain!
+    grain.opacity = 0.2
+    grain.grainsize = 7
+
+    vignette = shine.vignette!
+    vignette.parameters = {radius: 0.9, opacity: 0.7}
+
+    godsray = shine.godsray!
+
+    desaturate = shine.desaturate {
+        strength: 0.6
+        tint:     {255, 250, 200}
+    }
+
+    post_effect = grain\chain shine.separate_chroma!\chain shine.glowsimple!\chain ((shine.crt!\set "x", .15)\set "y", .15)\chain shine.scanlines!
 
     .run = ->
         dt = 0
@@ -44,7 +63,8 @@ with love
 
                 .graphics.origin!
 
-                state\draw!
+                post_effect\draw ->
+                    state\draw!
 
                 .graphics.present!
 

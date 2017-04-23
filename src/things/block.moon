@@ -1,7 +1,7 @@
 block = {}
 
-block.new = (model, x, y) ->
-    b = {:model}
+block.new = (model, x, y, tag) ->
+    b = {:model, :tag}
     world\add b, x, y, b.model.width * 2, b.model.height * 2
     b.draw = =>
         @model\draw!

@@ -3,6 +3,8 @@ export state = {
     entities:  {}
 
     cam: {x: 0, y: 0, z: 0, dx: 0, dy: 0, dz: 0, pos_x: 0, pos_y: 0}
+
+    level: 1
 }
 
 export entity = require "src/things"
@@ -46,9 +48,9 @@ sortx = (a, b) ->
 sorty = (a, b) ->
     (avgn a, 2) > avgn b, 2
 
-with state
+with state    
     .load = =>
-        level\load "res/level1.png"
+        level\load "res/level#{.level}.png"
 
         for li in *.absolutes
             break unless li

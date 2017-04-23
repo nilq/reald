@@ -20,7 +20,7 @@ class
                 v_line = split (v\sub 3), " "
 
                 table.insert @faces, [(tonumber a) for a in *v_line]
-        
+
         @width, @height = 0, 0
         for v in *@vertices
             @width  = v[1] if v[1] > @width

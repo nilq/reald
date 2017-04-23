@@ -45,6 +45,9 @@ player.new = (model, x, y) ->
             if c.normal.x != 0
                 @dx = 0
                 @wall = c.normal.x
+            
+            if c.other.tag == "hurtful"
+                love.event.quit!
 
         state.cam.dx = (avgn @, 1)
         state.cam.dy = (avgn @, 2)

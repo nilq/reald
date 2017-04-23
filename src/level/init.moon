@@ -2,9 +2,10 @@ level = {
     grid_size: 2
     player: false
     default: {
-        "dirt":  {0, 0, 0}
-        "grass": {0, 255, 0}
-        "dude":  {255, 255, 0}
+        "angry":  {255, 0, 0}
+        "dirt":   {0, 0, 0}
+        "grass":  {0, 255, 0}
+        "dude":   {255, 255, 0}
     }
 }
 
@@ -35,6 +36,17 @@ with level
                     v[3] += z
 
                 b = entity.block.new cube, x, y
+                state\spawn_absolute b, y / .grid_size
+            
+            when "angry"
+                cube = OBJ "res/cube.obj", 255, 0, 0
+
+                for v in *cube.vertices
+                    v[1] += x + ox
+                    v[2] += y + oy
+                    v[3] += z
+
+                b = entity.block.new cube, x, y, "hurtful"
                 state\spawn_absolute b, y / .grid_size
 
             when "dirt"
